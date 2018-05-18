@@ -1,9 +1,9 @@
 {
-  "name": "default",
+  "name": "voyage",
   "version": "1.0.0",
-  "description": "tusk",
-  "productName": "tusk",
-  "cordovaId": "tusk.tabletop.com",
+  "description": "voyage",
+  "productName": "voyage",
+  "cordovaId": "voyage.tabletop.com",
   "author": "Durban-Designer <royce.birnbaum@gmail.com>",
   "private": true,
   "scripts": {

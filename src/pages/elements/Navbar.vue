@@ -1,7 +1,7 @@
 <template>
   <div class="main" v-on:click="$router.push('/')">
-    <h1>Tusk Mk1</h1>
-    <h2>Neverend Edition</h2>
+    <h1>Voyage Mk1</h1>
+    <h2>Ultra Pre Alpha</h2>
   </div>
 </template>
 

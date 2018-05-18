@@ -91,7 +91,7 @@ module.exports = function (ctx) {
       }
     },
     cordova: {
-       id: 'yourapp.company.com'
+       id: 'voyage.company.com'
     },
     electron: {
       extendWebpack (cfg) {

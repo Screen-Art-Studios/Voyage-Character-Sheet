@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var CharacterSchema = new mongoose.Schema({
+var CharacterVoyageSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -63,5 +63,5 @@ var CharacterSchema = new mongoose.Schema({
   }
 })
 
-var Character = mongoose.model("Character", CharacterSchema);
-module.exports = Character;
+var CharacterVoyage = mongoose.model("CharacterVoyage", CharacterVoyageSchema);
+module.exports = CharacterVoyage;

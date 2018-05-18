@@ -1,29 +1,16 @@
 <template>
   <div class="main">
     <div class="character" v-if="modal==='character'">
-      <button class="edit" v-on:click="modal='edit'">Edit Character</button>
-      <button class="back" v-on:click="clearCharacter(); populateCharacters(); modal=''">Back</button>
       <div class="name">Name: <span>{{activeCharacter.name}}</span></div>
-      <div class="classType">Class: <span>{{activeCharacter.classType}}</span></div>
-      <div class="level">Level: <span>{{activeCharacter.characterLevel}}</span></div>
       <div class="hp">Health: <span>{{activeCharacter.health}}</span></div>
-      <div class="stamina">Stamina: <span>{{activeCharacter.stamina}}</span></div>
-      <div class="faction">Factions: <span>{{activeCharacter.factions}}</span></div>
+      <div class="exhaustion">Exhaustion: <span>{{activeCharacter.exhaustion}}</span></div>
       <div class="race">Race:<span>{{activeCharacter.race}}</span></div>
-      <div class="job">Job:<span>{{activeCharacter.job}}</span></div>
-      <div class="AC">Armor Class:<span>{{activeCharacter.totalAC}}</span></div>
-      <div class="wallet">Wallet:<span>{{activeCharacter.wallet}}</span></div>
-      <div class="bank">Bank:<span>{{activeCharacter.bank}}</span></div>
-      <div class="ship">Ship:<span>{{activeCharacter.ship}}</span></div>
-      <div class="vit">Vitality: <span>{{activeCharacter.vit}}</span></div>
+      <div class="yid">Yid:<span>{{activeCharacter.yid}}</span></div>
       <div class="str">Strength: <span>{{activeCharacter.str}}</span></div>
       <div class="dex">Dexterity: <span>{{activeCharacter.dex}}</span></div>
       <div class="int">Intelligence: <span>{{activeCharacter.int}}</span></div>
-      <div class="con">Constitution: <span>{{activeCharacter.con}}</span></div>
-      <div class="end">Endurance: <span>{{activeCharacter.end}}</span></div>
-      <div class="att">Attenuation: <span>{{activeCharacter.att}}</span></div>
+      <div class="tgh">Toughness: <span>{{activeCharacter.tgh}}</span></div>
       <div class="cha">Charisma: <span>{{activeCharacter.cha}}</span></div>
-      <div class="lck">Luck: <span>{{activeCharacter.luck}}</span></div>
       <div class="will">Willpower: <span>{{activeCharacter.will}}</span></div>
       <h3 class="skillsHeader">Skills:</h3>
       <div class="skills">
@@ -33,6 +20,28 @@
             <h4 class="skillName">{{skill.name}}</h4>
             <p class="skillDescription"> {{skill.description}}</p>
             <button class="hide" v-on:click="skill.toggled=!skill.toggled">Hide Skill</button>
+          </div>
+        </div>
+      </div>
+      <h3 class="traitsHeader">Traits:</h3>
+      <div class="traits">
+        <div class="trait" v-for="trait in activeCharacter.traits" v-bind:key="trait.id">
+          <h4 v-on:click="trait.toggled=!trait.toggled" v-if="!trait.toggled">{{trait.name}}</h4>
+          <div class="traitDetails" v-if="trait.toggled">
+            <h4 class="traitName">{{trait.name}}</h4>
+            <p class="traitDescription"> {{trait.description}}</p>
+            <button class="hide" v-on:click="trait.toggled=!trait.toggled">Hide trait</button>
+          </div>
+        </div>
+      </div>
+      <h3 class="abilitiesHeader">Abilities:</h3>
+      <div class="abilities">
+        <div class="ability" v-for="ability in activeCharacter.abilities" v-bind:key="ability.id">
+          <h4 v-on:click="ability.toggled=!ability.toggled" v-if="!ability.toggled">{{ability.name}}</h4>
+          <div class="abilityDetails" v-if="ability.toggled">
+            <h4 class="abilityName">{{ability.name}}</h4>
+            <p class="abilityDescription"> {{ability.description}}</p>
+            <button class="hide" v-on:click="ability.toggled=!ability.toggled">Hide Skill</button>
           </div>
         </div>
       </div>
@@ -47,35 +56,40 @@
           </div>
         </div>
       </div>
+      <button class="edit" v-on:click="modal='edit'">Edit Character</button>
+      <button class="viewback" v-on:click="clearCharacter(); populateCharacters(); modal=''">Back</button>
     </div>
     <div class="editModal" v-else-if="modal==='edit'">
       <div>Name<input class="name" v-model="activeCharacter.name" placeholder="name"/></div>
-      <div>Class<input class="classType" v-model="activeCharacter.classType" placeholder="class type" /></div>
-      <div>Level<input class="level" v-model="activeCharacter.characterLevel" placeholder="characer level" type="number" /></div>
       <div>Health<input class="hp" v-model="activeCharacter.health" placeholder="health" type="number" /></div>
-      <div>Stamina<input class="stamina" v-model="activeCharacter.stamina" placeholder="stamina" type="number" /></div>
-      <div>Faction<input class="faction" v-model="activeCharacter.factions" placeholder="factions" /></div>
+      <div>Exhaustion<input class="exhaustion" v-model="activeCharacter.exhaustion" placeholder="exhaustion" type="number" /></div>
       <div>Race<input class="race" v-model="activeCharacter.race" placeholder="race" /></div>
-      <div>Occupation<input class="job" v-model="activeCharacter.job" placeholder="job" /></div>
-      <div>Armor Class<input class="AC" v-model="activeCharacter.totalAC" placeholder="total armor class" type="number" /></div>
-      <div>Wallet<input class="wallet" v-model="activeCharacter.wallet" placeholder="personal wallet" type="number" /></div>
-      <div>Bank<input class="bank" v-model="activeCharacter.bank" placeholder="bank" type="number" /></div>
-      <div>Ship<input class="ship" v-model="activeCharacter.ship" placeholder="ship charge" type="number" /></div>
-      <div>Vitality<input class="vit" v-model="activeCharacter.vit" placeholder="vitality" type="number" /></div>
+      <div>Yid<input class="yid" v-model="activeCharacter.yid" placeholder="yid" type="number" /></div>
       <div>Strength<input class="str" v-model="activeCharacter.str" placeholder="strength" type="number" /></div>
       <div>Dexterity<input class="dex" v-model="activeCharacter.dex" placeholder="dexterity" type="number" /></div>
       <div>Intelligence<input class="int" v-model="activeCharacter.int" placeholder="intelligence" type="number" /></div>
-      <div>Constitution<input class="con" v-model="activeCharacter.con" placeholder="constitution" type="number" /></div>
-      <div>Endurance<input class="end" v-model="activeCharacter.end" placeholder="endurance" type="number" /></div>
-      <div>Attenuation<input class="att" v-model="activeCharacter.att" placeholder="attenuation" type="number" /></div>
+      <div>Toughness<input class="tgh" v-model="activeCharacter.tgh" placeholder="toughness" type="number" /></div>
       <div>Charisma<input class="cha" v-model="activeCharacter.cha" placeholder="charisma" type="number" /></div>
-      <div>Luck<input class="lck" v-model="activeCharacter.luck" placeholder="luck" type="number" /></div>
       <div>Willpower<input class="will" v-model="activeCharacter.will" placeholder="willpower" type="number" /></div>
       <div class="skillsEdit">
         <div class="skill" v-for="skill in activeCharacter.skills" v-bind:key="skill.id">
           <input class="skillName" v-model="skill.name" placeholder="skill name" />
           <input class="skillDescription" v-model="skill.description" placeholder="skill description" />
           <button class="skillDelete" v-on:click="deleteSkill(skill)">Delete Skill</button>
+        </div>
+      </div>
+      <div class="traitsEdit">
+        <div class="trait" v-for="trait in activeCharacter.traits" v-bind:key="trait.id">
+          <input class="traitName" v-model="trait.name" placeholder="trait name" />
+          <input class="traitDescription" v-model="trait.description" placeholder="trait description" />
+          <button class="traitDelete" v-on:click="deleteTrait(trait)">Delete trait</button>
+        </div>
+      </div>
+      <div class="abilitiesEdit">
+        <div class="ability" v-for="ability in activeCharacter.abilities" v-bind:key="ability.id">
+          <input class="abilityName" v-model="ability.name" placeholder="ability name" />
+          <input class="abilityDescription" v-model="ability.description" placeholder="ability description" />
+          <button class="abilityDelete" v-on:click="deleteAbility(ability)">Delete ability</button>
         </div>
       </div>
       <div class="itemsEdit">
@@ -86,6 +100,8 @@
         </div>
       </div>
       <button class="newSkill" v-on:click="newSkill">Add New Blank Skill</button>
+      <button class="newTrait" v-on:click="newTrait">Add New Blank Trait</button>
+      <button class="newAbility" v-on:click="newAbility">Add New Blank Ability</button>
       <button class="newItem" v-on:click="newItem">Add New Blank Item</button>
       <button class="update" v-on:click="updateCharacter">Update Character</button>
       <button class="delete" v-on:click="modal='sure'">Delete Character</button>
@@ -96,30 +112,18 @@
       <button v-on:click="deleteCharacter">Yes</button>
       <button v-on:click="modal='edit'">no</button>
     </div>
-    <div class="create" v-else-if="modal==='creation'">
+    <div class="editModal" v-else-if="modal==='creation'">
       <div>Name<input class="name" v-model="activeCharacter.name" placeholder="name"/></div>
-      <div>Class<input class="classType" v-model="activeCharacter.classType" placeholder="class type" /></div>
-      <div>Level<input class="level" v-model="activeCharacter.characterLevel" placeholder="characer level" type="number" /></div>
       <div>Health<input class="hp" v-model="activeCharacter.health" placeholder="health" type="number" /></div>
-      <div>Stamina<input class="stamina" v-model="activeCharacter.stamina" placeholder="stamina" type="number" /></div>
-      <div>Faction<input class="faction" v-model="activeCharacter.factions" placeholder="factions" /></div>
+      <div>Exhaustion<input class="exhaustion" v-model="activeCharacter.exhaustion" placeholder="exhaustion" type="number" /></div>
       <div>Race<input class="race" v-model="activeCharacter.race" placeholder="race" /></div>
-      <div>Occupation<input class="job" v-model="activeCharacter.job" placeholder="job" /></div>
-      <div>Armor Class<input class="AC" v-model="activeCharacter.totalAC" placeholder="total armor class" type="number" /></div>
-      <div>Wallet<input class="wallet" v-model="activeCharacter.wallet" placeholder="personal wallet" type="number" /></div>
-      <div>Bank<input class="bank" v-model="activeCharacter.bank" placeholder="bank" type="number" /></div>
-      <div>Ship<input class="ship" v-model="activeCharacter.ship" placeholder="ship charge" type="number" /></div>
-      <div>Vitality<input class="vit" v-model="activeCharacter.vit" placeholder="vitality" type="number" /></div>
+      <div>Yid<input class="yid" v-model="activeCharacter.yid" placeholder="yid" type="number" /></div>
       <div>Strength<input class="str" v-model="activeCharacter.str" placeholder="strength" type="number" /></div>
       <div>Dexterity<input class="dex" v-model="activeCharacter.dex" placeholder="dexterity" type="number" /></div>
       <div>Intelligence<input class="int" v-model="activeCharacter.int" placeholder="intelligence" type="number" /></div>
-      <div>Constitution<input class="con" v-model="activeCharacter.con" placeholder="constitution" type="number" /></div>
-      <div>Endurance<input class="end" v-model="activeCharacter.end" placeholder="endurance" type="number" /></div>
-      <div>Attenuation<input class="att" v-model="activeCharacter.att" placeholder="attenuation" type="number" /></div>
+      <div>Toughness<input class="tgh" v-model="activeCharacter.tgh" placeholder="toughness" type="number" /></div>
       <div>Charisma<input class="cha" v-model="activeCharacter.cha" placeholder="charisma" type="number" /></div>
-      <div>Luck<input class="lck" v-model="activeCharacter.luck" placeholder="luck" type="number" /></div>
       <div>Willpower<input class="will" v-model="activeCharacter.will" placeholder="willpower" type="number" /></div>
-      <h3 class="skillsHeader">Skills:</h3>
       <div class="skillsEdit">
         <div class="skill" v-for="skill in activeCharacter.skills" v-bind:key="skill.id">
           <input class="skillName" v-model="skill.name" placeholder="skill name" />
@@ -127,7 +131,20 @@
           <button class="skillDelete" v-on:click="deleteSkill(skill)">Delete Skill</button>
         </div>
       </div>
-      <h3 class="itemsHeader">Items:</h3>
+      <div class="traitsEdit">
+        <div class="trait" v-for="trait in activeCharacter.traits" v-bind:key="trait.id">
+          <input class="traitName" v-model="trait.name" placeholder="trait name" />
+          <input class="traitDescription" v-model="trait.description" placeholder="trait description" />
+          <button class="traitDelete" v-on:click="deleteTrait(trait)">Delete trait</button>
+        </div>
+      </div>
+      <div class="abilitiesEdit">
+        <div class="ability" v-for="ability in activeCharacter.abilities" v-bind:key="ability.id">
+          <input class="abilityName" v-model="ability.name" placeholder="ability name" />
+          <input class="abilityDescription" v-model="ability.description" placeholder="ability description" />
+          <button class="abilityDelete" v-on:click="deleteAbility(ability)">Delete ability</button>
+        </div>
+      </div>
       <div class="itemsEdit">
         <div class="item" v-for="item in activeCharacter.inventory" v-bind:key="item.id">
           <input class="itemName" v-model="item.name" placeholder="item name" />
@@ -136,13 +153,15 @@
         </div>
       </div>
       <button class="newSkill" v-on:click="newSkill">Add New Blank Skill</button>
+      <button class="newTrait" v-on:click="newTrait">Add New Blank Trait</button>
+      <button class="newAbility" v-on:click="newAbility">Add New Blank Ability</button>
       <button class="newItem" v-on:click="newItem">Add New Blank Item</button>
-      <button class="newChar" v-on:click="makeCharacter">Make New Character</button>
-      <button class="back" v-on:click="clearCharacter(); populateCharacters(); modal=''">Back</button>
+      <button class="update" v-on:click="makeCharacter">Make Character</button>
+      <button v-on:click="clearCharacter(); populateCharacters(); modal=''">Back</button>
     </div>
     <div class="listView" v-else>
       <h1>Characters</h1>
-      <h2 v-for="character in characters" v-on:click="viewCharacter(character)" v-bind:key="character.id">Lv.{{character.characterLevel}} - {{character.name}}<br/>{{character.race}} - {{character.classType}}</h2>
+      <h2 v-for="character in characters" v-on:click="viewCharacter(character)" v-bind:key="character.id">{{character.name}}<br/>{{character.race}}</h2>
       <button class="new" v-on:click="modal='creation'">Make a New Character</button>
     </div>
   </div>
@@ -160,28 +179,19 @@ export default {
       activeCharacter: {
         id: '',
         name: '',
-        classType: '',
-        characterLevel: '',
         health: '',
-        stamina: '',
-        factions: '',
+        exhaustion: '',
         race: '',
-        job: '',
-        totalAC: '',
-        wallet: '',
-        bank: '',
-        ship: '',
-        vit: '',
+        yid: '',
         str: '',
         dex: '',
+        tgh: '',
         int: '',
-        con: '',
-        end: '',
-        att: '',
         cha: '',
-        luck: '',
         will: '',
         skills: [],
+        traits: [],
+        abilities: [],
         inventory: []
       }
     }
@@ -194,7 +204,7 @@ export default {
     populateCharacters () {
       let vue = this
       vue.characters = []
-      axios.get('https://api.tuskgaming.com/characters/all', {headers: { 'Authorization': 'JWT ' + vue.user.token }})
+      axios.get('https://api.tuskgaming.com/charactersVoyage/all', {headers: { 'Authorization': 'JWT ' + vue.user.token }})
         .then(response => {
           vue.characters = response.data
         })
@@ -206,60 +216,43 @@ export default {
       let vue = this
       vue.activeCharacter.id = character._id
       vue.activeCharacter.name = character.name
-      vue.activeCharacter.classType = character.classType
-      vue.activeCharacter.characterLevel = character.characterLevel
       vue.activeCharacter.health = character.health
-      vue.activeCharacter.stamina = character.stamina
-      vue.activeCharacter.factions = character.factions
+      vue.activeCharacter.exhaustion = character.exhaustion
       vue.activeCharacter.race = character.race
-      vue.activeCharacter.job = character.job
-      vue.activeCharacter.totalAC = character.totalAC
-      vue.activeCharacter.wallet = character.wallet
-      vue.activeCharacter.bank = character.bank
-      vue.activeCharacter.ship = character.ship
-      vue.activeCharacter.vit = character.vit
+      vue.activeCharacter.yid = character.yid
       vue.activeCharacter.str = character.str
       vue.activeCharacter.dex = character.dex
+      vue.activeCharacter.tgh = character.tgh
       vue.activeCharacter.int = character.int
-      vue.activeCharacter.con = character.con
-      vue.activeCharacter.end = character.end
-      vue.activeCharacter.att = character.att
       vue.activeCharacter.cha = character.cha
-      vue.activeCharacter.luck = character.luck
       vue.activeCharacter.will = character.will
       vue.activeCharacter.skills = character.skills
+      vue.activeCharacter.traits = character.traits
+      vue.activeCharacter.abilities = character.abilities
       vue.activeCharacter.inventory = character.inventory
       vue.modal = 'character'
     },
     makeCharacter () {
       let vue = this
-      axios.post('https://api.tuskgaming.com/characters', {
+      axios.post('https://api.tuskgaming.com/charactersVoyage', {
         name: vue.activeCharacter.name,
-        classType: vue.activeCharacter.classType,
-        characterLevel: vue.activeCharacter.characterLevel,
         health: vue.activeCharacter.health,
-        stamina: vue.activeCharacter.stamina,
-        factions: vue.activeCharacter.factions,
+        exhaustion: vue.activeCharacter.exhaustion,
         race: vue.activeCharacter.race,
-        job: vue.activeCharacter.job,
-        totalAC: vue.activeCharacter.totalAC,
-        wallet: vue.activeCharacter.wallet,
-        bank: vue.activeCharacter.bank,
-        ship: vue.activeCharacter.ship,
-        vit: vue.activeCharacter.vit,
+        yid: vue.activeCharacter.yid,
         str: vue.activeCharacter.str,
         dex: vue.activeCharacter.dex,
+        tgh: vue.activeCharacter.tgh,
         int: vue.activeCharacter.int,
-        con: vue.activeCharacter.con,
-        end: vue.activeCharacter.end,
-        att: vue.activeCharacter.att,
         cha: vue.activeCharacter.cha,
-        luck: vue.activeCharacter.luck,
         will: vue.activeCharacter.will,
         skills: vue.activeCharacter.skills,
+        traits: vue.activeCharacter.traits,
+        abilities: vue.activeCharacter.abilities,
         inventory: vue.activeCharacter.inventory
       })
         .then(result => {
+          vue.activeCharacter.id = result.data._id
           vue.modal = 'character'
         })
         .catch(err => {
@@ -268,30 +261,21 @@ export default {
     },
     updateCharacter () {
       let vue = this
-      axios.put('https://api.tuskgaming.com/characters/' + vue.activeCharacter.id, {
+      axios.put('https://api.tuskgaming.com/charactersVoyage/' + vue.activeCharacter.id, {
         name: vue.activeCharacter.name,
-        classType: vue.activeCharacter.classType,
-        characterLevel: vue.activeCharacter.characterLevel,
         health: vue.activeCharacter.health,
-        stamina: vue.activeCharacter.stamina,
-        factions: vue.activeCharacter.factions,
+        exhaustion: vue.activeCharacter.exhaustion,
         race: vue.activeCharacter.race,
-        job: vue.activeCharacter.job,
-        totalAC: vue.activeCharacter.totalAC,
-        wallet: vue.activeCharacter.wallet,
-        bank: vue.activeCharacter.bank,
-        ship: vue.activeCharacter.ship,
-        vit: vue.activeCharacter.vit,
+        yid: vue.activeCharacter.yid,
         str: vue.activeCharacter.str,
         dex: vue.activeCharacter.dex,
+        tgh: vue.activeCharacter.tgh,
         int: vue.activeCharacter.int,
-        con: vue.activeCharacter.con,
-        end: vue.activeCharacter.end,
-        att: vue.activeCharacter.att,
         cha: vue.activeCharacter.cha,
-        luck: vue.activeCharacter.luck,
         will: vue.activeCharacter.will,
         skills: vue.activeCharacter.skills,
+        traits: vue.activeCharacter.traits,
+        abilities: vue.activeCharacter.abilities,
         inventory: vue.activeCharacter.inventory
       }, {headers: { 'Authorization': 'JWT ' + vue.user.token }})
         .then(result => {
@@ -304,33 +288,24 @@ export default {
     clearCharacter () {
       let vue = this
       vue.activeCharacter.name = ''
-      vue.activeCharacter.classType = ''
-      vue.activeCharacter.characterLevel = ''
       vue.activeCharacter.health = ''
-      vue.activeCharacter.stamina = ''
-      vue.activeCharacter.factions = ''
+      vue.activeCharacter.exhaustion = ''
       vue.activeCharacter.race = ''
-      vue.activeCharacter.job = ''
-      vue.activeCharacter.totalAC = ''
-      vue.activeCharacter.wallet = ''
-      vue.activeCharacter.bank = ''
-      vue.activeCharacter.ship = ''
-      vue.activeCharacter.vit = ''
-      vue.activeCharacter.str = ''
-      vue.activeCharacter.dex = ''
-      vue.activeCharacter.int = ''
-      vue.activeCharacter.con = ''
-      vue.activeCharacter.end = ''
-      vue.activeCharacter.att = ''
-      vue.activeCharacter.cha = ''
-      vue.activeCharacter.luck = ''
-      vue.activeCharacter.will = ''
+      vue.activeCharacter.yid = 0
+      vue.activeCharacter.str = 0
+      vue.activeCharacter.dex = 0
+      vue.activeCharacter.tgh = 0
+      vue.activeCharacter.int = 0
+      vue.activeCharacter.cha = 0
+      vue.activeCharacter.will = 0
       vue.activeCharacter.skills = []
+      vue.activeCharacter.traits = []
+      vue.activeCharacter.abilities = []
       vue.activeCharacter.inventory = []
     },
     deleteCharacter () {
       let vue = this
-      axios.delete('https://api.tuskgaming.com/characters/' + vue.activeCharacter.id, {headers: { 'Authorization': 'JWT ' + vue.user.token }})
+      axios.delete('https://api.tuskgaming.com/charactersVoyage/' + vue.activeCharacter.id, {headers: { 'Authorization': 'JWT ' + vue.user.token }})
         .then(result => {
           vue.clearCharacter()
           vue.populateCharacters()
@@ -345,6 +320,14 @@ export default {
       let vue = this
       vue.activeCharacter.skills.push({name: '', description: '', toggled: false})
     },
+    newTrait () {
+      let vue = this
+      vue.activeCharacter.traits.push({name: '', description: '', toggled: false})
+    },
+    newAbility () {
+      let vue = this
+      vue.activeCharacter.abilities.push({name: '', description: '', toggled: false})
+    },
     newItem () {
       let vue = this
       vue.activeCharacter.inventory.push({name: '', description: '', weight: 0, toggled: false})
@@ -353,6 +336,16 @@ export default {
       let vue = this
       let position = vue.activeCharacter.skills.indexOf(skill)
       vue.activeCharacter.skills.splice(position, 1)
+    },
+    deleteTrait (trait) {
+      let vue = this
+      let position = vue.activeCharacter.traits.indexOf(trait)
+      vue.activeCharacter.traits.splice(position, 1)
+    },
+    deleteAbility (ability) {
+      let vue = this
+      let position = vue.activeCharacter.abilities.indexOf(ability)
+      vue.activeCharacter.abilities.splice(position, 1)
     },
     deleteItem (item) {
       let vue = this
@@ -398,7 +391,6 @@ export default {
   grid-gap: 10px;
   grid-template-rows: repeat(30, 1fr);
 }
-
 .character {
   margin-left: 5%;
   margin-right: 5%;
@@ -412,134 +404,68 @@ export default {
 /*Character Page*/
 .name {
   grid-column-start: 1;
-  grid-column-end: 6;
-  grid-row: 2;
-  border: 1px solid black;
-}
-.classType {
-  grid-column-start: 6;
   grid-column-end: 11;
   grid-row: 2;
-  border: 1px solid black;
-}
-.level {
-  grid-column-start: 1;
-  grid-column-end: 3;
-  grid-row: 3;
   border: 1px solid black;
 }
 .race {
-  grid-column-start: 3;
-  grid-column-end: 6;
-  grid-row: 3;
-  border: 1px solid black;
-}
-.faction {
   grid-column-start: 1;
   grid-column-end: 11;
-  grid-row: 4;
+  grid-row: 3;
   border: 1px solid black;
 }
 .hp {
   grid-column-start: 1;
-  grid-column-end: 4;
-  grid-row: 5;
+  grid-column-end: 5;
+  grid-row: 4;
   border: 1px solid black;
 }
-.stamina {
-  grid-column-start: 4;
-  grid-column-end: 7;
-  grid-row: 5;
-  border: 1px solid black;
-}
-.AC {
-  grid-column-start: 7;
+.exhaustion {
+  grid-column-start: 5;
   grid-column-end: 11;
-  grid-row: 5;
+  grid-row: 4;
   border: 1px solid black;
 }
-.job {
-  grid-column-start: 6;
-  grid-column-end: 11;
-  grid-row: 3;
-  border: 1px solid black;
-}
-.wallet {
-  grid-column-start: 1;
-  grid-column-end: 4;
-  grid-row: 6;
-  border: 1px solid black;
-}
-.bank {
-  grid-column-start: 4;
-  grid-column-end: 7;
-  grid-row: 6;
-  border: 1px solid black;
-}
-.ship {
-  grid-column-start: 7;
-  grid-column-end: 11;
-  grid-row: 6;
-  border: 1px solid black;
-}
-.vit {
+.yid {
   grid-column-start: 1;
   grid-column-end: 5;
-  grid-row: 8;
+  grid-row: 5;
   border: 1px solid black;
 }
 .str {
   grid-column-start: 1;
   grid-column-end: 5;
-  grid-row: 9;
+  grid-row: 6;
   border: 1px solid black;
 }
 .dex {
   grid-column-start: 1;
   grid-column-end: 5;
-  grid-row: 10;
+  grid-row: 7;
   border: 1px solid black;
 }
 .int {
   grid-column-start: 1;
   grid-column-end: 5;
-  grid-row: 11;
+  grid-row: 8;
   border: 1px solid black;
 }
-.con {
+.tgh {
   grid-column-start: 1;
   grid-column-end: 5;
-  grid-row: 12;
-  border: 1px solid black;
-}
-.end {
-  grid-column-start: 1;
-  grid-column-end: 5;
-  grid-row: 13;
+  grid-row: 9;
   border: 1px solid black;
 }
 .cha {
   grid-column-start: 1;
   grid-column-end: 5;
-  grid-row: 14;
-  border: 1px solid black;
-}
-.att {
-  grid-column-start: 1;
-  grid-column-end: 5;
-  grid-row: 17;
-  border: 1px solid black;
-}
-.lck {
-  grid-column-start: 1;
-  grid-column-end: 5;
-  grid-row: 15;
+  grid-row: 10;
   border: 1px solid black;
 }
 .will {
   grid-column-start: 1;
   grid-column-end: 5;
-  grid-row: 16;
+  grid-row: 11;
   border: 1px solid black;
 }
 h1 {
@@ -550,9 +476,38 @@ h1 {
   margin-bottom: 60px;
   font-weight: lighter;
 }
+h2 {
+  text-align: center;
+}
 .skills {
-  grid-row-start: 20;
-  grid-row-end: 25;
+  grid-row-start: 14;
+  grid-row-end: 20;
+  grid-column-start: 1;
+  grid-column-end: 11;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(20, 1em);
+  border: 1px solid black;
+  text-decoration: underline;
+  padding-left: 5%;
+  line-height: 30px;
+}
+.traits {
+  grid-row-start: 22;
+  grid-row-end: 26;
+  grid-column-start: 1;
+  grid-column-end: 11;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(20, 1em);
+  border: 1px solid black;
+  text-decoration: underline;
+  padding-left: 5%;
+  line-height: 30px;
+}
+.abilities {
+  grid-row-start: 28;
+  grid-row-end: 34;
   grid-column-start: 1;
   grid-column-end: 11;
   display: grid;
@@ -566,24 +521,37 @@ h1 {
 .items {
   text-decoration: underline;
   padding-left: 5%;
-  grid-row-start: 28;
-  grid-row-end: 34;
+  grid-row-start: 37;
+  grid-row-end: 44;
   grid-column-start: 1;
   grid-column-end: 11;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(20, 1em);
   border: 1px solid black;
+  margin-bottom: 140px;
 }
 .skillsHeader {
   text-align: center;
-  grid-row-start: 18;
+  grid-row-start: 12;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.traitsHeader {
+  text-align: center;
+  grid-row-start: 20;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.abilitiesHeader {
+  text-align: center;
+  grid-row-start: 26;
   grid-column-start: 1;
   grid-column-end: 3;
 }
 .itemsHeader {
   text-align: center;
-  grid-row-start: 26;
+  grid-row-start: 36;
   grid-column-start: 1;
   grid-column-end: 3;
 }
@@ -598,12 +566,23 @@ h1 {
   color: #fff;
   box-shadow: 0px 3px 4px black;
   background-image: url('../assets/noise.png');
-  grid-row: 1;
-  grid-column-start: 1;
-  grid-column-end: 5;
   height: 2em;
   line-height: 1.4em;
   width: 100%;
+  left: 0;
+  position: fixed;
+  bottom: 40px;
+}
+.viewback {
+  box-shadow: 0px 3px 4px black;
+  background-image: url('../assets/noise.png');
+  height: 2em;
+  line-height: 1.4em;
+  width: 100%;
+  left: 0;
+  color: #fff;
+  position: fixed;
+  bottom: 0;
 }
 .back {
   box-shadow: 0px 3px 4px black;
@@ -630,11 +609,11 @@ h1 {
 }
 h2 {
   color: white;
+  text-align: center;
   grid-column-start: 2;
   grid-column-end: 10;
   background-image: url('../assets/noise.png');
   line-height: 28px;
-  padding-left: 5%;
   font-size: 1.3em;
   height: 60px;
 }
